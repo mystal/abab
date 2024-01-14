@@ -1,3 +1,4 @@
+class_name Player
 extends CharacterBody2D
 
 # TODO: Move to global vars.
@@ -129,12 +130,19 @@ func decrement_pew_pews():
 	if _num_pew_pews < 0:
 		_num_pew_pews = 0
 
+func _die():
+	position = _respawn_position
+	velocity = Vector2.ZERO
+	# TODO: Give temporary invulnerability
+	# TODO: Play a death sound!
+
 func _on_area_2d_body_entered(body: Node2D):
 	if body is TileMap:
-		position = _respawn_position
-		velocity = Vector2.ZERO
-		# TODO: Play a death sound!
+		_die()
 
 func _on_area_2d_area_entered(area: Area2D):
 	if area.is_in_group("teleporters"):
 		get_tree().change_scene_to_file(area.NEXT_SCENE)
+	elif area is PewPew and area._owning_player != self:
+		area.queue_free()
+		_die()

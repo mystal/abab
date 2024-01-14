@@ -1,3 +1,4 @@
+class_name PewPew
 extends Area2D
 
 @export var SPEED: float = 1600.0
@@ -12,5 +13,7 @@ func _physics_process(delta):
 	position.x += SPEED * delta
 
 func _on_timer_timeout():
-	_owning_player.decrement_pew_pews()
 	queue_free()
+
+func _on_tree_exiting():
+	_owning_player.decrement_pew_pews()

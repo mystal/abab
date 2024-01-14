@@ -24,4 +24,5 @@ frame = 35
 process_callback = 0
 one_shot = true
 
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="timeout" from="LifetimeTimer" to="." method="_on_timer_timeout"]

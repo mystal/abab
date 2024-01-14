@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bshy87ub3s0c0"]
+[gd_scene load_steps=4 format=3 uid="uid://bshy87ub3s0c0"]
 
 [ext_resource type="TileSet" uid="uid://b3ebumrbsl3ee" path="res://scenes/levels/platformer_tileset.tres" id="1_vtjro"]
 [ext_resource type="PackedScene" uid="uid://6bf4ltxajfih" path="res://scenes/player/player.tscn" id="2_0hxl6"]
 [ext_resource type="PackedScene" uid="uid://wb5kxi6lufbd" path="res://scenes/camera/camera.tscn" id="3_bgaqg"]
-[ext_resource type="PackedScene" uid="uid://doors7q4rmuf6" path="res://scenes/enemy/enemy.tscn" id="4_07sny"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -27,9 +26,6 @@ position = Vector2(-1296, 1152)
 [node name="Player2" parent="." instance=ExtResource("2_0hxl6")]
 position = Vector2(-139, 1152)
 PLAYER_ID = 2
-
-[node name="Enemy" parent="." instance=ExtResource("4_07sny")]
-position = Vector2(-464, 1152)
 
 [node name="MinCameraLimit" type="Node2D" parent="."]
 position = Vector2(-2048, -384)
