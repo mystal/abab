@@ -21,12 +21,12 @@ layer_1/y_sort_origin = 0
 layer_1/z_index = 10
 layer_1/tile_data = PackedInt32Array()
 
-[node name="Player" parent="." instance=ExtResource("2_0hxl6")]
+[node name="Player1" parent="." instance=ExtResource("2_0hxl6")]
 position = Vector2(-1296, 1152)
 
-[node name="Camera2D" parent="Player" node_paths=PackedStringArray("MinLimitNode", "MaxLimitNode") instance=ExtResource("3_bgaqg")]
-MinLimitNode = NodePath("../../MinCameraLimit")
-MaxLimitNode = NodePath("../../MaxCameraLimit")
+[node name="Player2" parent="." instance=ExtResource("2_0hxl6")]
+position = Vector2(-139, 1152)
+PLAYER_ID = 2
 
 [node name="Enemy" parent="." instance=ExtResource("4_07sny")]
 position = Vector2(-464, 1152)
@@ -36,3 +36,8 @@ position = Vector2(-2048, -384)
 
 [node name="MaxCameraLimit" type="Node2D" parent="."]
 position = Vector2(1152, 1408)
+
+[node name="Camera2D" parent="." node_paths=PackedStringArray("MinLimitNode", "MaxLimitNode") instance=ExtResource("3_bgaqg")]
+position = Vector2(-1296, 1152)
+MinLimitNode = NodePath("../MinCameraLimit")
+MaxLimitNode = NodePath("../MaxCameraLimit")

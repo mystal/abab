@@ -21,6 +21,8 @@ enum Facing {
 	Right,
 }
 
+@export var PLAYER_ID: int = 1
+
 @export var PEW_PEW_SCENE: PackedScene
 @export var MAX_PEWS: int = 3
 
@@ -50,14 +52,26 @@ var JUMP_RELEASE_SPEED: float = 0.0
 var _num_pew_pews: int = 0
 var _facing: Facing = Facing.Right
 
+# Input action vars
+var _jump_input: String = "jump"
+var _move_left_input: String = "move_left"
+var _move_right_input: String = "move_right"
+var _shoot_input: String = "shoot"
+
 func _ready():
+	# Append PLAYER_ID to input action strings
+	_jump_input += str(PLAYER_ID)
+	_move_left_input += str(PLAYER_ID)
+	_move_right_input += str(PLAYER_ID)
+	_shoot_input += str(PLAYER_ID)
+
 	if JUMP_RELEASE_BEHAVIOR == JumpReleaseBehavior.HalfTile:
 		JUMP_RELEASE_SPEED = HALF_TILE_JUMP_SPEED
 
 func _physics_process(delta):
 	if not is_on_floor():
 		# TODO: Add a minimum jump release time.
-		if _can_release_jump() and Input.is_action_just_released("jump") and velocity.y < JUMP_RELEASE_SPEED:
+		if _can_release_jump() and Input.is_action_just_released(_jump_input) and velocity.y < JUMP_RELEASE_SPEED:
 			# Clamp velocity if greater than JUMP_RELEASE_SPEED.
 			velocity.y = JUMP_RELEASE_SPEED
 		else:
@@ -65,12 +79,12 @@ func _physics_process(delta):
 			velocity.y += GRAVITY * delta
 
 	# Handle Jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if Input.is_action_just_pressed(_jump_input) and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
 	# TODO: Add acceleration/deceleration.
-	var direction = Input.get_axis("move_left", "move_right")
+	var direction = Input.get_axis(_move_left_input, _move_right_input)
 	if direction:
 		velocity.x = direction * MOVE_SPEED
 	else:
@@ -97,7 +111,7 @@ func _physics_process(delta):
 			$ShootRoot.position.x = -abs($ShootRoot.position.x)
 		_sprite.flip_h = !facing_right
 
-	if Input.is_action_just_pressed("shoot"):
+	if Input.is_action_just_pressed(_shoot_input):
 		if _num_pew_pews < MAX_PEWS:
 			var pew_pew = PEW_PEW_SCENE.instantiate()
 			pew_pew._owning_player = self
