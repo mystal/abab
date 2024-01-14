@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://mb8o5h1c2ehv"]
+
+[ext_resource type="Script" path="res://scenes/projectiles/pew_pew.gd" id="1_jclua"]
+[ext_resource type="Texture2D" uid="uid://bgca2kqbir0um" path="res://assets/tilesets/platformPack_tilesheet@2.png" id="1_obyqe"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vw8md"]
+radius = 26.0
+
+[node name="PewPew" type="Area2D"]
+collision_layer = 4
+script = ExtResource("1_jclua")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_vw8md")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 2
+texture = ExtResource("1_obyqe")
+hframes = 14
+vframes = 7
+frame = 35
+
+[node name="LifetimeTimer" type="Timer" parent="."]
+process_callback = 0
+one_shot = true
+
+[connection signal="timeout" from="LifetimeTimer" to="." method="_on_timer_timeout"]
