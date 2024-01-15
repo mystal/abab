@@ -52,12 +52,14 @@ var JUMP_RELEASE_SPEED: float = 0.0
 
 var _num_pew_pews: int = 0
 var _facing: Facing = Facing.Right
+var _dead: bool = false
 
 # Input action vars
 var _jump_input: String = "jump"
 var _move_left_input: String = "move_left"
 var _move_right_input: String = "move_right"
 var _shoot_input: String = "shoot"
+var _slide_input: String = "slide"
 
 func _ready():
 	# Append PLAYER_ID to input action strings
@@ -65,11 +67,16 @@ func _ready():
 	_move_left_input += str(PLAYER_ID)
 	_move_right_input += str(PLAYER_ID)
 	_shoot_input += str(PLAYER_ID)
+	_slide_input += str(PLAYER_ID)
 
 	if JUMP_RELEASE_BEHAVIOR == JumpReleaseBehavior.HalfTile:
 		JUMP_RELEASE_SPEED = HALF_TILE_JUMP_SPEED
 
 func _physics_process(delta):
+	if _dead:
+		return
+
+	# In-air logic.
 	if not is_on_floor():
 		# TODO: Add a minimum jump release time.
 		if _can_release_jump() and Input.is_action_just_released(_jump_input) and velocity.y < JUMP_RELEASE_SPEED:
@@ -79,7 +86,7 @@ func _physics_process(delta):
 			# Apply gravity.
 			velocity.y += GRAVITY * delta
 
-	# Handle Jump.
+	# Handle Jump and Slide.
 	if Input.is_action_just_pressed(_jump_input) and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
@@ -102,6 +109,7 @@ func _physics_process(delta):
 	else:
 		_sprite.play("walk")
 
+	# Update facing
 	if !is_zero_approx(velocity.x):
 		var facing_right = velocity.x > 0.0
 		if facing_right:
@@ -112,15 +120,15 @@ func _physics_process(delta):
 			$ShootRoot.position.x = -abs($ShootRoot.position.x)
 		_sprite.flip_h = !facing_right
 
-	if Input.is_action_just_pressed(_shoot_input):
-		if _num_pew_pews < MAX_PEWS:
-			var pew_pew = PEW_PEW_SCENE.instantiate()
-			pew_pew._owning_player = self
-			pew_pew.position = $ShootRoot.global_position
-			if _facing == Facing.Left:
-				pew_pew.SPEED *= -1
-			get_tree().current_scene.add_child(pew_pew)
-			_num_pew_pews += 1
+	# Try to shoot
+	if Input.is_action_just_pressed(_shoot_input) and _num_pew_pews < MAX_PEWS:
+		var pew_pew = PEW_PEW_SCENE.instantiate()
+		pew_pew._owning_player = self
+		pew_pew.position = $ShootRoot.global_position
+		if _facing == Facing.Left:
+			pew_pew.SPEED *= -1
+		get_tree().current_scene.add_child(pew_pew)
+		_num_pew_pews += 1
 
 func _can_release_jump() -> bool:
 	return JUMP_RELEASE_BEHAVIOR != JumpReleaseBehavior.None
@@ -133,8 +141,21 @@ func decrement_pew_pews():
 func _die():
 	position = _respawn_position
 	velocity = Vector2.ZERO
+	$AnimatedSprite2D.visible = false
+	$WorldCollision2D.set_deferred("disabled", true)
+	$Area2D/AreaCollision2D.set_deferred("disabled", true)
+	$DeathTimer.start()
+	_dead = true
 	# TODO: Give temporary invulnerability
 	# TODO: Play a death sound!
+	
+func _respawn():
+	position = _respawn_position
+	velocity = Vector2.ZERO
+	$AnimatedSprite2D.visible = true
+	$WorldCollision2D.set_deferred("disabled", false)
+	$Area2D/AreaCollision2D.set_deferred("disabled", false)
+	_dead = false
 
 func _on_area_2d_body_entered(body: Node2D):
 	if body is TileMap:
@@ -146,3 +167,6 @@ func _on_area_2d_area_entered(area: Area2D):
 	elif area is PewPew and area._owning_player != self:
 		area.queue_free()
 		_die()
+
+func _on_death_timer_timeout():
+	_respawn()

@@ -113,5 +113,9 @@ shape = SubResource("RectangleShape2D_4i7dl")
 [node name="ShootRoot" type="Node2D" parent="."]
 position = Vector2(58, -57)
 
+[node name="DeathTimer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]
