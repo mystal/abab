@@ -24,6 +24,8 @@ enum Facing {
 
 @export var PLAYER_ID: int = 1
 
+@export var DEFAULT_LIVES: int = 3
+
 @export var PEW_PEW_SCENE: PackedScene
 @export var MAX_PEWS: int = 3
 
@@ -50,6 +52,7 @@ var JUMP_RELEASE_SPEED: float = 0.0
 @onready var _respawn_position: Vector2 = position
 @onready var _sprite = $AnimatedSprite2D
 
+var _lives: int = DEFAULT_LIVES
 var _num_pew_pews: int = 0
 var _facing: Facing = Facing.Right
 var _dead: bool = false
@@ -139,6 +142,10 @@ func decrement_pew_pews():
 		_num_pew_pews = 0
 
 func _die():
+	_lives -= 1
+	if _lives <= 0:
+		_lives = 0
+
 	position = _respawn_position
 	velocity = Vector2.ZERO
 	$AnimatedSprite2D.visible = false
