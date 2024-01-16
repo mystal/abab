@@ -35,4 +35,4 @@ position = Vector2(-1296, 1152)
 MinLimitNode = NodePath("../MinCameraLimit")
 MaxLimitNode = NodePath("../MaxCameraLimit")
 
-[node name="Control" parent="." instance=ExtResource("4_37gh2")]
+[node name="HUD" parent="." instance=ExtResource("4_37gh2")]
