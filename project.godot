@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Oops All Bosses"
 run/main_scene="res://scenes/levels/boss_level.tscn"
-config/features=PackedStringArray("4.0", "GL Compatibility")
+config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://assets/icon.svg"
 
 [display]
