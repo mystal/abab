@@ -23,6 +23,7 @@ position = Vector2(-1296, 1152)
 [node name="Player2" parent="." instance=ExtResource("2_0hxl6")]
 position = Vector2(-139, 1152)
 PLAYER_ID = 2
+INITIAL_FACING = 0
 
 [node name="MinCameraLimit" type="Node2D" parent="."]
 position = Vector2(-2048, -384)

@@ -23,12 +23,14 @@ enum Facing {
 }
 
 @export var PLAYER_ID: int = 1
+@export var INITIAL_LIVES: int = 3
+@export var INITIAL_FACING: Facing = Facing.Right
 
-@export var DEFAULT_LIVES: int = 3
-
+@export_group("Pew Pews")
 @export var PEW_PEW_SCENE: PackedScene
 @export var MAX_PEWS: int = 3
 
+@export_group("Platforming")
 ## Horizontal speed in pixel units.
 @export_range(0.0, 2_000.0, 10.0, "or_greater") var MOVE_SPEED: float = 800.0
 ## Jump height in tiles.
@@ -49,12 +51,12 @@ var HALF_TILE_JUMP_PEAK_TIME: float = sqrt(TILE_HEIGHT / GRAVITY)
 var HALF_TILE_JUMP_SPEED: float = -(GRAVITY * HALF_TILE_JUMP_PEAK_TIME)
 var JUMP_RELEASE_SPEED: float = 0.0
 
+@onready var _lives: int = INITIAL_LIVES
+@onready var _facing: Facing = INITIAL_FACING
 @onready var _respawn_position: Vector2 = position
 @onready var _sprite = $AnimatedSprite2D
 
-var _lives: int = DEFAULT_LIVES
 var _num_pew_pews: int = 0
-var _facing: Facing = Facing.Right
 var _dead: bool = false
 
 # Input action vars
@@ -65,6 +67,11 @@ var _shoot_input: String = "shoot"
 var _slide_input: String = "slide"
 
 func _ready():
+	# Update derived facing values.
+	if _facing == Facing.Left:
+		$ShootRoot.position.x = -abs($ShootRoot.position.x)
+		_sprite.flip_h = true
+
 	# Append PLAYER_ID to input action strings
 	_jump_input += str(PLAYER_ID)
 	_move_left_input += str(PLAYER_ID)
@@ -155,7 +162,7 @@ func _die():
 	_dead = true
 	# TODO: Give temporary invulnerability
 	# TODO: Play a death sound!
-	
+
 func _respawn():
 	position = _respawn_position
 	velocity = Vector2.ZERO
