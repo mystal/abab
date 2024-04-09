@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://6bf4ltxajfih"]
+[gd_scene load_steps=15 format=3 uid="uid://6bf4ltxajfih"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_vbq8o"]
 [ext_resource type="Texture2D" uid="uid://dsx7ttbbig0cv" path="res://assets/player/platformerPack_character@2.png" id="2_52qge"]
@@ -23,6 +23,10 @@ region = Rect2(0, 0, 192, 192)
 [sub_resource type="AtlasTexture" id="AtlasTexture_65veg"]
 atlas = ExtResource("2_52qge")
 region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ev32n"]
+atlas = ExtResource("2_52qge")
+region = Rect2(384, 192, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0xh5v"]
 atlas = ExtResource("2_52qge")
@@ -67,6 +71,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ev32n")
+}],
+"loop": true,
+"name": &"slide",
 "speed": 5.0
 }, {
 "frames": [{
